@@ -5,6 +5,33 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { authToken } = require("../middleware/auth");
 
+router.get("/users", async function (req, res, next) {
+  try {
+    // const userId = req.user._id;
+    let users = await userSchema.find();
+
+    if (users.length === 0) {
+      return res.status(200).send({
+        status: 200,
+        message: "No user found",
+        data: [],
+      });
+    }
+
+    res.status(200).send({
+      status: 200,
+      message: "success",
+      data: users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      status: 500,
+      message: "Internal server error",
+    });
+  }
+});
+
 router.post("/login", async function (req, res, next) {
   const { username, password } = req.body;
   try {

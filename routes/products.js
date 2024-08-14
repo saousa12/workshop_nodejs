@@ -18,7 +18,7 @@ router.get("/", authToken, async function (req, res, next) {
 
     await res.status(200).send({
       status: 200,
-      message: "success",
+      message: "Get success",
       data: products,
     });
   } catch (error) {
@@ -54,11 +54,12 @@ router.get("/:id", authToken, async function (req, res, next) {
 
 // create product
 router.post("/", authToken, async function (req, res, next) {
-  const { productName, category, description, price, stock, createdBy } =
+  const { productName, image, category, description, price, stock, createdBy } =
     req.body;
   try {
     let product = await productSchema.create({
       productName,
+      image,
       category,
       description,
       price,
@@ -75,10 +76,11 @@ router.post("/", authToken, async function (req, res, next) {
 
 router.put("/:id", authToken, async function (req, res, next) {
   const { id } = req.params;
-  const { productName, category, description, price, stock } = req.body;
+  const { productName, image, category, description, price, stock } = req.body;
   try {
     let product = await productSchema.findByIdAndUpdate(id, {
       productName,
+      image,
       category,
       description,
       price,
