@@ -32,4 +32,18 @@ router.get("/orders", authToken, async function (req, res, next) {
   }
 });
 
+router.delete("/orders/:id", authToken, async function (req, res, next) {
+  const { id } = req.params;
+  try {
+    let order = await orderSchema.findByIdAndDelete(id);
+    if (!order) {
+      res.status(400).send({ status: 400, massage: "Order not found" });
+    }
+
+    await res.status(200).send({ status: 200, message: "Delete success." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
 module.exports = router;

@@ -64,7 +64,7 @@ router.post("/login", async function (req, res, next) {
     const payload = {
       id: user._id,
       username: user.username,
-      approve: user.approve,
+      approve: "approve",
     };
 
     // สร้าง JWT token
