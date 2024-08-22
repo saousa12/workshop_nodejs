@@ -105,6 +105,7 @@ router.delete("/:id", authToken, async function (req, res, next) {
   const { id } = req.params;
   try {
     let product = await productSchema.findByIdAndDelete(id);
+    let order = await orderSchema.findOneAndDelete({ productId: id });
     if (!product) {
       res.status(400).send({ status: 400, massage: "Product not found" });
     }
@@ -121,7 +122,7 @@ router.delete("/:id", authToken, async function (req, res, next) {
 //create order
 router.post("/:id/orders", authToken, async function (req, res, next) {
   const { id } = req.params;
-  const { productId, amount, userId } = req.body;
+  const { productId, amount, userId, total } = req.body;
   try {
     let product = await productSchema.findById(id);
     if (!product) {
@@ -154,16 +155,16 @@ router.post("/:id/orders", authToken, async function (req, res, next) {
     }
 
     const userId = req.user._id;
-    console.log(typeof id);
 
     let newOrder = await orderSchema.create({
       userId: userId,
       productId: id,
       amount,
+      total,
     });
 
-    product.stock -= amount;
-    await product.save();
+    // product.stock -= amount;
+    // await product.save();
 
     res.status(201).send({
       status: 201,
